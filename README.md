@@ -1,5 +1,17 @@
+**Build**
+```
+$ cd asmloader
+$ make
+```
+Build asmloader, compile all  *.asm files in `examples` and run them using asmloader binary
+ ```
+$ cd asmloader
+$ make run 
+```
+
 **Usage**:
 `asmloader <file.bin>`
+
 
 What does this do (in short):
 1. It allocates read/write/execute memory.

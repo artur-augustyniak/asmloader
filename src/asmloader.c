@@ -108,9 +108,9 @@
 
 // To avoid dealing with multiple different linkers the stubs are directly
 // included.
-#include "stubs/x86_64_linux_stub.c"
-#include "stubs/x86_64_mswin_stub.c"
-#include "stubs/x86_32_stub.c"
+#include "../stubs/x86_64_linux_stub.c"
+#include "../stubs/x86_64_mswin_stub.c"
+#include "../stubs/x86_32_stub.c"
 
 #if defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || \
     defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
