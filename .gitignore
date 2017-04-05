@@ -1,5 +1,6 @@
 ###Basic artifacts
 *.bin
-asmloader
+asmloader32
+asmloader64
 ### JetBrains
 .idea

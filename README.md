@@ -1,17 +1,20 @@
-**Build**
-```
-$ cd asmloader
-$ make
-```
-Build asmloader, compile all  *.asm files in `examples` and run them using asmloader binary
- ```
-$ cd asmloader
-$ make run 
-```
-
 **Usage**:
 `asmloader <file.bin>`
 
+**Using Makefile**
+```
+$ cd asmloader
+$ make asmloader32
+$ make asmloader64
+```
+Build asmloader using selected arch, compile all  *.asm  files for selected arch in `examples` 
+and run them using proper asmloader binary 
+ ```
+$ cd asmloader
+$ make run32
+$ make run64 
+```
+Clean repository `make clean`
 
 What does this do (in short):
 1. It allocates read/write/execute memory.

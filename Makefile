@@ -19,10 +19,10 @@ $(APPNAME_86_64): $(c_files)
 	$(CC) $(CC_OPTS) $(c_files) -o $(TARGETDIR)/$(APPNAME_86_64)
 
 run32: $(bin_files32) $(APPNAME_86_32)
-	for bin in $(EX_DIR)/*.bin; do $(TARGETDIR)/$(APPNAME_86_32) ./$$bin; done
+	for bin in $(EX_DIR)/*32.bin; do $(TARGETDIR)/$(APPNAME_86_32) ./$$bin; done
 
 run64: $(bin_files64) $(APPNAME_86_64)
-	for bin in $(EX_DIR)/*.bin; do $(TARGETDIR)/$(APPNAME_86_64) ./$$bin; done
+	for bin in $(EX_DIR)/*64.bin; do $(TARGETDIR)/$(APPNAME_86_64) ./$$bin; done
 
 $(EX_DIR)/%.bin: $(EX_DIR)/%.asm
 	$(ASM) -o $@ $<
