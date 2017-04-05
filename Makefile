@@ -1,5 +1,5 @@
 CC = gcc
-CC_OPTS= -std=gnu99 -Wall --pedantic
+CC_OPTS= -std=gnu11 -Wall
 86_32_ARCH= -m32
 ASM = nasm
 
