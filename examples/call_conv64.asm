@@ -1,5 +1,6 @@
 [bits 64]
-
+; gynvael.coldwind.pl/?id=641
+; http://gynvael.coldwind.pl/?id=387
 call no_arg_procedure
 
 push 0
