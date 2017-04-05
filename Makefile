@@ -1,5 +1,5 @@
 CC = gcc
-CC_OPTS= -std=gnu11 -Wall
+CC_OPTS= -std=gnu11 -Wall -O0 -g
 86_32_ARCH= -m32
 ASM = nasm
 
@@ -10,7 +10,7 @@ EX_DIR=examples
 TARGETDIR=.
 c_files=$(addprefix $(SRCDIR)/, asmloader.c)
 bin_files32=$(addprefix $(EX_DIR)/, call_conv32.bin hello32.bin)
-bin_files64=$(addprefix $(EX_DIR)/, hello64.bin)
+bin_files64=$(addprefix $(EX_DIR)/, call_conv64.bin hello64.bin)
 
 $(APPNAME_86_32): $(c_files)
 	$(CC) $(CC_OPTS) $(86_32_ARCH) $(c_files) -o $(TARGETDIR)/$(APPNAME_86_32)
