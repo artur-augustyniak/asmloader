@@ -7,7 +7,7 @@ call asdf
 add esp, 4
 push eax
 call main_p
-    db "Wyniak: %i", 0xa, 0
+    db "Wynik: %i", 0xa, 0
 main_p:
  call [ebx + 3 * 4] ;printf("%i", asdf(1234));
 add esp, 8

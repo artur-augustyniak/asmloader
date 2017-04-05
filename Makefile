@@ -9,7 +9,7 @@ SRCDIR=src
 EX_DIR=examples
 TARGETDIR=.
 c_files=$(addprefix $(SRCDIR)/, asmloader.c)
-bin_files32=$(addprefix $(EX_DIR)/, call_conv32.bin hello32.bin)
+bin_files32=$(addprefix $(EX_DIR)/, call_conv32.bin hello32.bin stack_frame32.bin)
 bin_files64=$(addprefix $(EX_DIR)/, call_conv64.bin hello64.bin)
 
 $(APPNAME_86_32): $(c_files)
