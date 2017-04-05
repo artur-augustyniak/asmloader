@@ -1,70 +1,89 @@
 [bits 32]
-
-mov eax, 12345678
-call print_int1
-
-push 987654321
-call print_int2
-add esp, 4
-
-push 55667788
-call print_int3
-
-call print_asdf
-call print_asdf
-call print_asdf
-call print_asdf
+; ################## STACK LEGEND ########################
+; STACK [][][456] -> to lower addresses
+; ########################################################
+                            ; MAIN
 
 
-push 0
-call [ebx]; exit(0)
+; ################## FASTCALL ############################
+mov eax, 123                ; int eax = 123
+                            ; STACK [][]
+call print_fastcall         ; print_fastcall(eax)
+                            ; no caller cleanup
 
-; fastcall:eax
-; print_int1(int)
-print_int1:
-    push eax
+
+; ################## CDECL ###############################
+push 456                    ; int a = 456
+                            ; STACK [][][456]
+call print_cdecl            ; print_cdecl(a)
+add esp, 4                  ; caller stack cleanup
+                            ; STACK [][]
+
+
+; ################## STDCALL #############################
+push 789                    ; int a = 789
+                            ; STACK [][][789]
+call print_stdcall          ; print_stdcall(a)
+                            ; no caller cleanup
+
+
+; ################## PLAIN (NO ARGS) #####################
+call no_arg_procedure
+
+; ################## MAIN EXIT ###########################
+push 0                      ; cdecl return code
+call [ebx + 0 * 4]          ; exit(0)
+                            ; MAIN END
+
+
+;########################################################
+;############## FUNCTION DEFINITIONS ####################
+;########################################################
+print_fastcall:                     ; print_fastcall(eax)
+    push eax                        ; last printf arg
     call _print1
-    db "print_int1: %i", 0xa, 0
-    _print1:
-    call [ebx + 3 * 4] ;printf
-    add esp, 8
-    ret
-;end
+    db "print_fastcall(%i);", 0xa, 0 ; fmt string
+    _print1:                        ; STACK [][RET][EAX][FMT]
+    call [ebx + 3 * 4]              ; printf
+    add esp, 8                      ; clean up stack fmt and local arg
+                                    ; STACK [][RET]
+    ret                             ; pop return address and jump
+; end
 
 
-; cdecl
-; print_int2(int)
-print_int2:
-    ; esp - > [RET][arg]
-    push dword [esp + 4]
-    ; esp -> [arg][RET][arg]
+print_cdecl:                        ; print_cdecl(a)
+                                    ; STACK [][a][RET]
+    push dword [esp + 4]            ; STACK [][a][RET][a]
     call _print2
-    db "print_int2: %i", 0xa, 0
-    _print2:
-    call [ebx + 3 * 4] ;printf
-    add esp, 8
-    ret
-;end
+    db "print_cdecl(%i);", 0xa, 0   ; fmt string
+    _print2:                        ; STACK [][a][RET][a][FMT]
+    call [ebx + 3 * 4]              ; printf
+    add esp, 8                      ; clean up stack fmt and local arg
+                                    ; STACK [][a][RET]
+    ret                             ; pop return address and jump
+; end
 
-; stdcall
-; print_int3(int)
-print_int3:
-    push dword [esp + 4]
+
+print_stdcall:                      ; print_stdcal(a)
+                                    ; STACK [][a][RET]
+    push dword [esp + 4]            ; STACK [][a][RET][a]
     call _print3
-    db "print_int3: %i", 0xa, 0
-    _print3:
-    call [ebx + 3 * 4] ;printf
-    add esp, 8
-    retn 4
-;end
+    db "print_stdcall(%i);", 0xa, 0 ; fmt string
+    _print3:                        ; STACK [][a][RET][a][FMT]
+    call [ebx + 3 * 4]              ; printf
+    add esp, 8                      ; clean up stack fmt and local arg
+                                    ; STACK [][a][RET]
+    retn 4                          ; cleanup stack after popping RET
+; end                               ; STACK []
 
 
-; print_asdf()
-print_asdf:
+no_arg_procedure:                  ; no_arg_procedure()
+                                   ; STACK [][RET]
     call _print4
-    db "print_asdf - bez argumentow", 0xa, 0
-    _print4:
-    call [ebx + 3 * 4] ;printf
-    add esp, 4
-    ret
-;end
+    db "no_arg_procedure()", 0xa, 0; printf string param
+    _print4:                       ; STACK [][RET][STRING]
+    call [ebx + 3 * 4]             ; printf
+    add esp, 4                     ; clean up stack local arg
+                                   ; STACK [][RET]
+    ret                            ; pop return address and jump
+; end
