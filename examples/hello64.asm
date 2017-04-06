@@ -7,6 +7,6 @@ print_hello:
   call [rbx+3*8]
   add rsp, 8
 
- push 0
+push 0
 call [rbx]
 

@@ -1,10 +1,10 @@
 #!/usr/bin/python
 # A script that generates .c files that can be included by asmloader.
-import subprocess
+#import subprocess
 
 def generate_c_file(fname):
   print "Processing:", fname
-  subprocess.check_call(['nasm', fname + ".nasm"])
+  #subprocess.check_call(['nasm', fname + ".nasm"])
 
   with open(fname, "rb") as f:
     d = f.read()
