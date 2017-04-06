@@ -1,6 +1,7 @@
 ###Basic artifacts
 *.bin
-asmloader*
+asmloader32
+asmloader64
 stubs/*_stub
 stubs/*_stub.c
 ### JetBrains
