@@ -43,11 +43,12 @@ vaarg_converter:
   mov [rel saved_rcx], rcx
   mov [rel saved_r8], r8
   mov [rel saved_r9], r9
+  mov [rel saved_r15], r15
 
   pop rdx  ; Function to be called.
-  pop rax  ; Return address.
-  mov [rel saved_ret], rax
-  mov rax, rdx
+  pop r15  ; Return address.
+  mov [rel saved_ret], r15
+  mov r15, rdx
 
   mov rdi, [rsp+8*0]
   mov rsi, [rsp+8*1]
@@ -56,7 +57,7 @@ vaarg_converter:
   mov r8, [rsp+8*4]
   mov r9, [rsp+8*5]
 
-  call rax
+  call r15
 
   mov rdi, [rel saved_rdi]
   mov rsi, [rel saved_rsi]
@@ -64,6 +65,7 @@ vaarg_converter:
   mov rcx, [rel saved_rcx]
   mov r8, [rel saved_r8]
   mov r9, [rel saved_r9]
+  mov r15, [rel saved_r15]
   jmp [rel saved_ret]
 
 ; Attempt to move out the data part to another cache-line.
@@ -90,6 +92,7 @@ storage_area:
   saved_rcx: dq 0
   saved_r8: dq 0
   saved_r9: dq 0
+  saved_r15: dq 0
   saved_ret: dq 0
   
 ; Align to STUB_SIZE.
