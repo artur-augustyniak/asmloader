@@ -1,18 +1,23 @@
 **Usage**:
-`asmloader <file.bin>`
+`asmloader[32|64] <file.bin>`
 
-**Using Makefile**
+**Using Make**
 ```
 $ cd asmloader
 $ make asmloader32
 $ make asmloader64
 ```
-Build asmloader using selected arch, compile all  *.asm  files for selected arch in `examples` 
-and run them using proper asmloader binary 
+Build asmloader using selected arch, compile all  *.nasm  files for selected arch in `examples` 
+and run them using proper asmloader binary: 
  ```
 $ cd asmloader
 $ make run32
 $ make run64 
+```
+Or just run all:
+```
+$ cd asmloader
+$ make run
 ```
 Clean repository `make clean`
 

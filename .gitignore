@@ -1,8 +1,9 @@
 ###Basic artifacts
-*.bin
 asmloader32
 asmloader64
-stubs/*_stub
-stubs/*_stub.c
+*_stub
+*_stub.c
+*.bin
+!.gitkeep
 ### JetBrains
 .idea
