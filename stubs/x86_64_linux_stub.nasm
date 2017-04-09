@@ -57,6 +57,9 @@ vaarg_converter:
   mov r8, [rsp+8*4]
   mov r9, [rsp+8*5]
 
+  ; When calling printf stub uses rax, so this register is nonzero.
+  ; This causes printf to "see" floating point arguments and starts using SSE.
+  ; At the same time if the stack does not have the proper alignment asmloader will crash.
   call r15
 
   mov rdi, [rel saved_rdi]
@@ -65,6 +68,9 @@ vaarg_converter:
   mov rcx, [rel saved_rcx]
   mov r8, [rel saved_r8]
   mov r9, [rel saved_r9]
+  
+  ; r12, r13, r14, r15, rbx, rsp, rbp are the callee-saved registers - they have a
+  ; "Yes" in the "Preserved across function calls" column.
   mov r15, [rel saved_r15]
   jmp [rel saved_ret]
 
