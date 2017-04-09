@@ -37,13 +37,13 @@ stub_scanf:
 ; Expects function-to-be-called's address on the stack.
 vaarg_converter:
   ; Order of arguments: rdi, rsi, rdx, rcx, r8, r9, <stack>
+  mov [rel saved_r15], r15
   mov [rel saved_rdi], rdi
   mov [rel saved_rsi], rsi
   mov [rel saved_rdx], rdx
   mov [rel saved_rcx], rcx
   mov [rel saved_r8], r8
   mov [rel saved_r9], r9
-  mov [rel saved_r15], r15
 
   pop rdx  ; Function to be called.
   pop r15  ; Return address.
@@ -57,10 +57,19 @@ vaarg_converter:
   mov r8, [rsp+8*4]
   mov r9, [rsp+8*5]
 
+  ; remove args passed via registers from stack to avoid printing
+  ; them next time in case of more than 6 printf arguments
+  ; no easy way to detect exact number of arguments this will work only if there is more than 6
+  mov [rel saved_rsp], rsp
+  add rsp, 48
+
   ; When calling printf stub uses rax, so this register is nonzero.
   ; This causes printf to "see" floating point arguments and starts using SSE.
   ; At the same time if the stack does not have the proper alignment asmloader will crash.
   call r15
+
+  ; sanitize stack?
+  mov rsp, [rel saved_rsp]
 
   mov rdi, [rel saved_rdi]
   mov rsi, [rel saved_rsi]
@@ -96,6 +105,7 @@ storage_area:
   saved_rsi: dq 0
   saved_rdx: dq 0
   saved_rcx: dq 0
+  saved_rsp: dq 0
   saved_r8: dq 0
   saved_r9: dq 0
   saved_r15: dq 0
