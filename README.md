@@ -1,5 +1,5 @@
 **Usage**:
-`asmloader[32|64] <file.bin>`
+`asmloader(32|64) <file.bin>`
 
 **Using Make**
 ```
@@ -17,7 +17,7 @@ $ make run64
 Or just run all:
 ```
 $ cd asmloader
-$ make run
+$ make [run] 
 ```
 Clean repository `make clean`
 

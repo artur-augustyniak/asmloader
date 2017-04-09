@@ -15,6 +15,8 @@ stubs_bin=$(addprefix $(STUB_TARGET_DIR)/, x86_32_stub x86_64_mswin_stub x86_64_
 bin_ex_32=$(addprefix $(EX_TARGET_DIR)/, 32_call_conv.bin 32_hello.bin 32_stack_frame.bin)
 bin_ex_64=$(addprefix $(EX_TARGET_DIR)/, 64_call_conv.bin 64_hello.bin)
 
+run: run32 run64
+
 $(APPNAME_86_32): $(stubs_c) $(src)
 	$(CC) $(CC_OPTS) -m32 $(src) -o $(APPNAME_86_32)
 
@@ -26,8 +28,6 @@ $(stubs_c): $(stubs_bin)
 
 $(STUB_TARGET_DIR)/%: $(STUB_DIR)/%.nasm
 	$(ASM) -o $@ $<
-
-run: run32 run64
 
 run32: $(bin_ex_32) $(APPNAME_86_32)
 	for bin in $(EX_TARGET_DIR)/32*.bin; do echo -e "\e[92m\e[1m32 bit exec\e[0m : \e[1m$$bin\e[0m" && ./$(APPNAME_86_32) ./$$bin ; done
