@@ -68,7 +68,7 @@ vaarg_converter:
   mov rcx, [rel saved_rcx]
   mov r8, [rel saved_r8]
   mov r9, [rel saved_r9]
-  
+
   ; r12, r13, r14, r15, rbx, rsp, rbp are the callee-saved registers - they have a
   ; "Yes" in the "Preserved across function calls" column.
   mov r15, [rel saved_r15]
