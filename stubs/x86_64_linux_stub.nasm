@@ -37,13 +37,13 @@ stub_scanf:
 ; Expects function-to-be-called's address on the stack.
 vaarg_converter:
   ; Order of arguments: rdi, rsi, rdx, rcx, r8, r9, <stack>
+  mov [rel saved_r15], r15
   mov [rel saved_rdi], rdi
   mov [rel saved_rsi], rsi
   mov [rel saved_rdx], rdx
   mov [rel saved_rcx], rcx
   mov [rel saved_r8], r8
   mov [rel saved_r9], r9
-  mov [rel saved_r15], r15
 
   pop rdx  ; Function to be called.
   pop r15  ; Return address.
@@ -56,6 +56,18 @@ vaarg_converter:
   mov rcx, [rsp+8*3]
   mov r8, [rsp+8*4]
   mov r9, [rsp+8*5]
+
+  ; remove args passed via registers from stack to avoid printing
+  ; them next time in case of more than 6 printf arguments
+  ; no easy way to detect exact number of arguments so we have to save stack
+  ; to rebuild it in case of less then 6 params
+  mov [rel saved_stack_top], rdi
+  mov [rel saved_stack_nd], rsi
+  mov [rel saved_stack_rd], rdx
+  mov [rel saved_stack_fourth], rcx
+  mov [rel saved_stack_fifth], r8
+  mov [rel saved_stack_sixth], r9
+  add rsp, 48
 
   ; When calling printf stub uses rax, so this register is nonzero.
   ; This causes printf to "see" floating point arguments and starts using SSE.
@@ -88,6 +100,14 @@ vaarg_converter:
   xor rax, rax
   call r15
 
+  ; restore 6 stack elements
+  push QWORD [rel saved_stack_sixth]
+  push QWORD [rel saved_stack_fifth]
+  push QWORD [rel saved_stack_fourth]
+  push QWORD [rel saved_stack_rd]
+  push QWORD [rel saved_stack_nd]
+  push QWORD [rel saved_stack_top]
+
   mov rdi, [rel saved_rdi]
   mov rsi, [rel saved_rsi]
   mov rdx, [rel saved_rdx]
@@ -95,13 +115,14 @@ vaarg_converter:
   mov r8, [rel saved_r8]
   mov r9, [rel saved_r9]
 
+
   ; r12, r13, r14, r15, rbx, rsp, rbp are the callee-saved registers - they have a
   ; "Yes" in the "Preserved across function calls" column.
   mov r15, [rel saved_r15]
   jmp [rel saved_ret]
 
 ; Attempt to move out the data part to another cache-line.
-times (0x100 - ($ - start)) db 0x00
+times (0x200 - ($ - start)) db 0x00
 
 jump_table:
   dq stub_exit
@@ -126,9 +147,16 @@ storage_area:
   saved_r9: dq 0
   saved_r15: dq 0
   saved_ret: dq 0
-  
+  ; space for saving 6 params taken off the stack
+  saved_stack_top: dq 0
+  saved_stack_nd: dq 0
+  saved_stack_rd: dq 0
+  saved_stack_fourth: dq 0
+  saved_stack_fifth: dq 0
+  saved_stack_sixth: dq 0
+
 ; Align to STUB_SIZE.
-times (0x200 - ($ - start)) db 0x0
+times (0x400 - ($ - start)) db 0x0
 real_start:
 
 

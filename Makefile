@@ -13,7 +13,7 @@ src=$(addprefix $(SRCDIR)/, *.c)
 stubs_c=$(addprefix $(STUB_TARGET_DIR)/, x86_32_stub.c x86_64_mswin_stub.c x86_64_linux_stub.c)
 stubs_bin=$(addprefix $(STUB_TARGET_DIR)/, x86_32_stub x86_64_mswin_stub x86_64_linux_stub)
 bin_ex_32=$(addprefix $(EX_TARGET_DIR)/, 32_call_conv.bin 32_hello.bin 32_stack_frame.bin)
-bin_ex_64=$(addprefix $(EX_TARGET_DIR)/, 64_call_conv.bin 64_hello.bin)
+bin_ex_64=$(addprefix $(EX_TARGET_DIR)/, 64_call_conv.bin 64_hello.bin 64_12_printf_args.bin)
 
 run: run32 run64
 
