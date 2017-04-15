@@ -57,10 +57,9 @@ vaarg_converter:
   mov r8, [rsp+8*4]
   mov r9, [rsp+8*5]
 
-  ; TODO, stub leaves unaligned stack at shellcode entry!!!
   ; When calling printf stub uses rax, so this register is nonzero.
   ; This causes printf to "see" floating point arguments and starts using SSE.
-  ; At the same time if the stack does not have the proper alignment asmloader will crash.
+  ; At the same time if the stack does not have the proper 16 byte alignment asmloader will crash.
   ; After first call [rbx + 3 * 8] call rax may be nonzero again
   ; so code like:
   ; [bits 64]
@@ -85,9 +84,8 @@ vaarg_converter:
   ;     add rsp, 8
   ;     ret
   ;  ;end
-  ; will leave stack unaligned and nonzero rax, this will crash, so
+  ; will leave stack unaligned and nonzero rax, this will crash, so:
   xor rax, rax
-
   call r15
 
   mov rdi, [rel saved_rdi]
