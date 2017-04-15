@@ -132,7 +132,7 @@
 #  error Unsupported or unrecognized architecture.
 #endif
 
-#define STUB_SIZE 0x200
+#define STUB_SIZE 0x400
 #define STUB_PAD  1
 
 typedef int (*func_t)();
