@@ -3,6 +3,28 @@
 call no_arg_procedure1
 call no_arg_procedure2
 
+    push 11
+    push 10
+    push 9
+    push 8
+    push 7
+    push 6
+    push 5
+    push 4
+    push 3
+    push 2
+    push 1
+    call print_hello
+        db "x86-64 printf(%d %d %d %d %d %d %d %d %d %d %d)", 0xa, 0
+    print_hello:
+    call [rbx+3*8]
+    add rsp, 64
+
+call no_arg_procedure2
+
+push 0
+call [rbx]
+
 push 0
 call [rbx + 0 * 8]
 

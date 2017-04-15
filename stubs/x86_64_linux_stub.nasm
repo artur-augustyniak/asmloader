@@ -58,8 +58,8 @@ vaarg_converter:
   mov r9, [rsp+8*5]
 
   ; remove args passed via registers from stack to avoid printing
-  ; them next time in case of more than 6 printf arguments
-  ; no easy way to detect exact number of arguments so we have to save stack
+  ; them twice in case of more than 6 printf arguments
+  ; no easy way to detect exact number of arguments so we have to save the stack
   ; to rebuild it in case of less then 6 params
   mov [rel saved_stack_top], rdi
   mov [rel saved_stack_nd], rsi
@@ -72,8 +72,9 @@ vaarg_converter:
   ; When calling printf stub uses rax, so this register is nonzero.
   ; This causes printf to "see" floating point arguments and starts using SSE.
   ; At the same time if the stack does not have the proper 16 byte alignment asmloader will crash.
-  ; After first call [rbx + 3 * 8] call rax may be nonzero again
+  ; After first [rbx + 3 * 8] call rax may be nonzero again
   ; so code like:
+  ;
   ; [bits 64]
   ;
   ; call no_arg_procedure
@@ -96,6 +97,7 @@ vaarg_converter:
   ;     add rsp, 8
   ;     ret
   ;  ;end
+  ;
   ; will leave stack unaligned and nonzero rax, this will crash, so:
   xor rax, rax
   call r15
